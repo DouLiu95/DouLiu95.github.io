@@ -18,11 +18,11 @@
 
   <!-- Title -->
   
-  <title>Create First Post - Dou Liu</title>
+  <title>How do I build this blog - Dou Liu</title>
 
   <!--Description-->
   
-      <meta name="description" content="In the post, I created my first hexo example.">
+      <meta name="description" content="Why Do I Need the BlogHaving my personal blog is always on my to-do-list but with lower priority. As the time of graduating approaching, I realized it">
   
 
   <!--Author-->
@@ -32,7 +32,7 @@
 
   <!--Open Graph Title-->
   
-      <meta property="og:title" content="Create First Post"/>
+      <meta property="og:title" content="How do I build this blog"/>
   
 
   <!--Open Graph Site Name-->
@@ -92,7 +92,7 @@
 			
   <div class="row">
     <div class="col-12">
-          <img class="img-fluid cover-image" src="/images/typing.jpg" alt="Create First Post">
+          <img class="img-fluid cover-image" src="/images/typing.jpg" alt="How do I build this blog">
     </div>
   </div>
 
@@ -100,12 +100,34 @@
   <div class="col-12 col-lg-8 offset-lg-2 mt-4">
 
     <div class="post-page text-center my-4">
-      <h1>Create First Post</h1>
+      <h1>How do I build this blog</h1>
       <hr>
       <span class="date">2021-10-21</span>
     </div>
 
-    <p>In the post, I created my first hexo example.</p>
+    <h1 id="Why-Do-I-Need-the-Blog"><a href="#Why-Do-I-Need-the-Blog" class="headerlink" title="Why Do I Need the Blog"></a>Why Do I Need the Blog</h1><p>Having my personal blog is always on my to-do-list but with lower priority. As the time of graduating approaching, I realized it is the best time to do it now, as I should get prepared of my previous work and project collection for job application, so why not? Not to mention I could share my learning progress, technics, results and mistakes I made with much more people here. </p>
+<h1 id="Hexo-and-Github-Pages"><a href="#Hexo-and-Github-Pages" class="headerlink" title="Hexo and Github Pages"></a>Hexo and Github Pages</h1><p>I do not want to spend too much time choosing the technology or service to use and building the site. So finally hexo and github pages seem to be a solution</p>
+<h2 id="What-is-Hexo"><a href="#What-is-Hexo" class="headerlink" title="What is Hexo"></a>What is Hexo</h2><blockquote>
+<p>Hexo is a fast, simple and powerful blog framework. You write posts in <a target="_blank" rel="noopener" href="http://daringfireball.net/projects/markdown/">Markdown</a> (or other markup languages) and Hexo generates static files with a beautiful theme in seconds .</p>
+</blockquote>
+<h3 id="Build-Local-Static-Website-First"><a href="#Build-Local-Static-Website-First" class="headerlink" title="Build Local Static Website First"></a>Build Local Static Website First</h3><p>Here, we first need to build a local static website before we make it public and accessible to Internet. Type commands below in Command Line</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-cli -g</span><br><span class="line">hexo init blog</span><br><span class="line">cd blog</span><br><span class="line">npm install </span><br><span class="line">hexo server</span><br></pre></td></tr></table></figure>
+
+<p>With this, the server is host on our localhost with port 4000. Open <a target="_blank" rel="noopener" href="http://localhost:4000/">http://localhost:4000/</a> to check it.</p>
+<h3 id="Command"><a href="#Command" class="headerlink" title="Command"></a>Command</h3><p>To add a page or post, the layout could be page, post and title looks like <code>&quot;My new post&quot;</code>.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new [layout] &lt;title&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Deploy-Website-on-Github-Pages"><a href="#Deploy-Website-on-Github-Pages" class="headerlink" title="Deploy Website on Github Pages"></a>Deploy Website on Github Pages</h2><p>First, create a new repo with name <code>&lt;github-username&gt;.github.io</code>.</p>
+<p>Then install the plugin `<strong>hexo-deployer-git</strong> by</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+
+<p>and then change the configuration by opening <code>blog/_config.yml</code> and add following code:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">    type: git</span><br><span class="line">    repo: https://github.com/&lt;github-username&gt;/&lt;github-username&gt;.github.io.git</span><br><span class="line">    branch: &lt;branch you want to deploy&gt;</span><br></pre></td></tr></table></figure>
+
+<p>After finishing steps above, run following commands to generate static files and deploy them to the github pages:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo generate</span><br><span class="line">hexo deploy</span><br></pre></td></tr></table></figure>
+
+<h1 id="Congradulation"><a href="#Congradulation" class="headerlink" title="Congradulation"></a>Congradulation</h1><p>Now open <code>https://&lt;github-username&gt;.github.io</code> and you should see your own blog!</p>
 
 
     
