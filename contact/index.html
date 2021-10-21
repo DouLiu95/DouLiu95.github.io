@@ -104,8 +104,8 @@
     document.addEventListener("adobe_dc_view_sdk.ready", function(){ 
         var adobeDCView = new AdobeDC.View({clientId: "33f2191083b044ff9c3102f5a0c3ac82", divId: "adobe-dc-view"});
         adobeDCView.previewFile({
-            content:{promise: "https://documentcloud.adobe.com/link/review?uri=urn:aaid:scds:US:45d34a0b-4e77-40f4-9381-74db1d85f734"},
-            metaData:{fileName: "Dou_cv"}
+            content:{location: {url: "https://documentcloud.adobe.com/view-sdk-demo/PDFs/Summary.pdf"}},
+            metaData:{fileName: "Summary.pdf"}
         }, {embedMode: "IN_LINE"});
     });
 </script>
