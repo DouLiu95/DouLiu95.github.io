@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!--
+    Blog Theme for Hexo: St. Andrews
+    Designed by Sharvari Desai
+    https://gumroad.com/l/hexo-theme-standrews
+  -->
+
+  <!-- Favicon -->
+  
+      <link rel="icon" href="/images/louvre-museum.png" type="image/x-icon" />
+  
+
+  <!-- Title -->
+  
+  <title>How to transfer the local knowledge database to Neo4j Aura - Dou Liu</title>
+
+  <!--Description-->
+  
+      <meta name="description" content="During the user evaluation of conversational virtual museum guide, one of the user pointed that the knowledge graph visualization was not working. So ">
+  
+
+  <!--Author-->
+  
+      <meta name="author" content="John Doe">
+  
+
+  <!--Open Graph Title-->
+  
+      <meta property="og:title" content="How to transfer the local knowledge database to Neo4j Aura"/>
+  
+
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="Dou Liu"/>
+
+  <!-- Pure CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/css?family=EB+Garamond|Montserrat:300" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/styles.css">
+
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  <!-- Google Analytics -->
+  
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+  <body>
+
+		<div class="container my-4">
+  <nav class="navbar navbar-toggleable-sm navbar-light px-1 py-3 my-3 mb-sm-3">
+    <a class="navbar-brand ml-2" href="/"><span class="title">Dou Liu</span></a>
+    <button class="navbar-toggler navbar-toggler-right py-2" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse text-center mt-3 mt-md-0" id="navbarCollapse">
+      <ul class="navbar-nav ml-auto my-auto">
+        
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+        
+          <li class="nav-item">
+            <a class="nav-link" href="/about">About</a>
+          </li>
+        
+          <li class="nav-item">
+            <a class="nav-link" href="/contact">Contact</a>
+          </li>
+        
+      </ul>
+      <hr class="hidden-md-up" />
+    </div>
+  </nav>
+</div>
+
+
+		<div class="container">
+			
+<div class="row">
+  <div class="col-12 col-lg-8 offset-lg-2 mt-4">
+
+    <div class="post-page text-center my-4">
+      <h1>How to transfer the local knowledge database to Neo4j Aura</h1>
+      <hr>
+      <span class="date">2021-11-04</span>
+    </div>
+
+    <p>During the user evaluation of conversational virtual museum guide, one of the user pointed that the knowledge graph visualization was not working. So the visualization of knowledge graph is meant to show the connection between entities in knowledge graph directly, to help user understand their relationships. </p>
+<h2 id="The-Problem-is-…"><a href="#The-Problem-is-…" class="headerlink" title="The Problem is …"></a>The Problem is …</h2><p>In my project, the visualization is implemented using <a target="_blank" rel="noopener" href="https://github.com/neo4j-contrib/neovis.js/">Neovis.js</a> package. It allows the graph visualization in the browser with data from Neo4j. In the config, it requires to connect with a Neo4j database, and in my case, it was connected with my local knowledge graph database, something like this:</p>
+<pre class="language-none"><code class="language-none">
+var config &#x3D; &#123;
+                    container_id: &quot;viz&quot;,
+                    server_url: &quot;bolt:&#x2F;&#x2F;localhost:6784&quot;,
+                    server_user: &quot;neo4j&quot;,
+                    server_password: &quot;password&quot;,
+                    ...
+                    &#125;</code></pre>
+
+<p>Therefore, when the user opens this page to view the visualization, the plug-in will perform queries on the local graph database based on the configuration above. The problem is that there is no graphical database on the user’s computer. So, I need to configure a database that can be accessed remotely.</p>
+<h2 id="Possible-way-to-solve-it"><a href="#Possible-way-to-solve-it" class="headerlink" title="Possible way to solve it"></a>Possible way to solve it</h2><p>So, as long as we have a remote database, or make my local database accessible remotely. This problem will be solved. There are two possible methods for it, as far as I concerned:</p>
+<ol>
+<li>Export my local knowledge base and upload it to a remote server</li>
+<li>Use tools like <a target="_blank" rel="noopener" href="https://ngrok.com/">Ngrok</a> to make localhost accessible by Internet</li>
+</ol>
+<p>Finally I chose the first method. Since the second way has an obvious shortcoming that my pc would not be a good server because it is not guaranteed to be accessible 7/24. </p>
+<p>And to find a remote server, it could be cloud service from Google or Amazon. But the configuration would be too much work for a small project, and the price… I don’t know. </p>
+<p>Fortunately, Neo4j has it own cloud service, which is called Neo4j <a target="_blank" rel="noopener" href="https://neo4j.com/cloud/aura/">Aura</a>, and Aura has free plan for personal use!</p>
+<h2 id="Hands-on"><a href="#Hands-on" class="headerlink" title="Hands on"></a>Hands on</h2><p>First, we need to export the knowledge graph data from local database. </p>
+<h4 id="Export-the-data"><a href="#Export-the-data" class="headerlink" title="Export the data"></a>Export the data</h4><p>I tried <code>apoc.export.all.csv</code>, however, which works not really well. The exported csv data can not be read properly on Aura. </p>
+<p>Another way is generating a dump file. This way is much easier and promising. Open the Terminal of your graph database on Neo4j Desktop. And the command to generate dump is:</p>
+<pre class="language-none"><code class="language-none">$ bin\neo4j-admin dump --database&#x3D;neo4j --to&#x3D;&#123;target path &#125;.dump</code></pre>
+
+<p>Result:</p>
+<pre class="language-none"><code class="language-none">Done: 89 files, 63.31MiB processed.</code></pre>
+
+<h4 id="Import-the-data-on-Aura"><a href="#Import-the-data-on-Aura" class="headerlink" title="Import the data on Aura"></a>Import the data on Aura</h4><p>Before importing, create a project on Aura, and click the title to see the import section:</p>
+<div align="center"><img src="https://i.ibb.co/nc7TJPR/aura.png" alt="Aura upload" style="width: 100%;max-height: 100%" /> </div>
+
+<p>Here, drop the Dump file to upload, wait for a while for the updating and then the knowledge graph is on the cloud server now.</p>
+<p>The URL for this database is offered. With the URL, name and password, now the knowledge graph can be accessed anywhere!</p>
+<h4 id="Issue-for-the-URL"><a href="#Issue-for-the-URL" class="headerlink" title="Issue for the URL"></a>Issue for the URL</h4><p>The default URL of the database on Aura starts with <code>neo4j+s://</code> , when I use this as the configuration in Neovis, it specifies to require SSL and a valid cert. As suggested in the document of Neovis</p>
+<blockquote>
+<h4 id="config-encrypted"><a href="#config-encrypted" class="headerlink" title="config.encrypted"></a><code>config.encrypted</code></h4><pre class="language-none"><code class="language-none">&quot;ENCRYPTION_OFF&quot;&#96; (default) or &#96;&quot;ENCRYPTION_ON&quot;</code></pre>
+
+<p>This must be set to <code>&quot;ENCRYPTION_ON&quot;</code> when using a secure WebSocket connection, such as with Neo4j Aura.</p>
+</blockquote>
+<p> I added it in the config, and the page got error said:</p>
+<pre class="language-none"><code class="language-none">Encryption&#x2F;trust can only be configured either through URL or config</code></pre>
+
+<p>To solve it, as suggested in <a target="_blank" rel="noopener" href="https://github.com/grand-stack/grand-stack-starter/issues/129">here</a>, set the URL to be <code>neo4j://</code> fixes it. Do not need <code>Encryption_on</code> here. </p>
+<h4 id="Connect-Aura-with-Python"><a href="#Connect-Aura-with-Python" class="headerlink" title="Connect Aura with Python"></a>Connect Aura with Python</h4><p>So as I transfer the dataset to Aura, I should also update my python code, which is connected to the graph base for query using Py2neo.</p>
+<p>The previous code to connect local database is:</p>
+<pre class="language-none"><code class="language-none">g &#x3D; Graph(
+            scheme&#x3D;&quot;neo4j&quot;,
+            host&#x3D;&quot;localhost&quot;,
+            port&#x3D;7687,
+            auth&#x3D;(&quot;neo4j&quot;, &quot;password&quot;))</code></pre>
+
+<p> For Aura, it changes to:</p>
+<pre class="language-none"><code class="language-none">g &#x3D; Graph(&quot;neo4j+s:&#x2F;&#x2F;fc932d9f.databases.neo4j.io&quot;, auth&#x3D;(&quot;neo4j&quot;, &quot;password&quot;), routing&#x3D;True)</code></pre>
+
+
+
+    
+
+
+  </div>
+</div>
+
+
+
+			<footer class="text-center mt-5 py-5">
+  
+  
+  
+  
+    <a href="https://www.instagram.com/liu.dou/" target="_blank"><i class="fa fa-instagram mr-4"></i></a>
+  
+  
+    <a href="https://www.linkedin.com/in/dou-liu-87b0361b6/" target="_blank"><i class="fa fa-linkedin mr-4"></i></a>
+  
+  
+  
+    <a href="https://github.com/DouLiu95" target="_blank"><i class="fa fa-github mr-4"></i></a>
+  
+  
+  
+  
+</footer>
+
+		</div>
+
+		<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+<!-- Disqus Comments -->
+
+
+  </body>
+</html>
