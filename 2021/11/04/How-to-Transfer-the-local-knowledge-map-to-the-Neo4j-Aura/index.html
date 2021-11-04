@@ -147,7 +147,7 @@ var config &#x3D; &#123;
 <p> I added it in the config, and the page got error said:</p>
 <pre class="language-none"><code class="language-none">Encryption&#x2F;trust can only be configured either through URL or config</code></pre>
 
-<p>To solve it, as suggested in <a target="_blank" rel="noopener" href="https://github.com/grand-stack/grand-stack-starter/issues/129">here</a>, set the URL to be <code>neo4j://</code> fixes it. Do not need <code>Encryption_on</code> here. </p>
+<p>To solve it, as suggested in <a target="_blank" rel="noopener" href="https://github.com/grand-stack/grand-stack-starter/issues/129">here</a>, set the URL to be <code>neo4j://</code> fixes it.  </p>
 <h4 id="Connect-Aura-with-Python"><a href="#Connect-Aura-with-Python" class="headerlink" title="Connect Aura with Python"></a>Connect Aura with Python</h4><p>So as I transfer the dataset to Aura, I should also update my python code, which is connected to the graph base for query using Py2neo.</p>
 <p>The previous code to connect local database is:</p>
 <pre class="language-none"><code class="language-none">g &#x3D; Graph(
