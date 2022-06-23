@@ -9,8 +9,6 @@
     
     <title>
         
-            Let&#39;s migrate graph to Neo4j Aura |
-        
         Dou Liu
     </title>
     
@@ -153,7 +151,7 @@
     <div class="article-content-container">
 
         <div class="article-title">
-            <span class="title-hover-animation">Let&#39;s migrate graph to Neo4j Aura</span>
+            <span class="title-hover-animation"></span>
         </div>
 
         
@@ -169,7 +167,7 @@
                     <div class="meta-info">
                         <div class="article-meta-info">
     <span class="article-date article-meta-item">
-        <i class="fas fa-edit"></i>&nbsp;2021-11-04 18:45:41
+        <i class="fas fa-edit"></i>&nbsp;2022-06-23 17:01:12
     </span>
     
     
@@ -177,7 +175,7 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>712 Words</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>789 Words</span>
         </span>
     
     
@@ -194,73 +192,78 @@
         
 
         <div class="article-content markdown-body">
-            <p>During the user evaluation of conversational virtual museum guide, one of the user pointed that the knowledge graph visualization was not working. The visualization of knowledge graph is meant to show the connection between entities in knowledge graph directly, to help user understand their relationships. </p>
-<h2 id="The-Problem-is-…"><a href="#The-Problem-is-…" class="headerlink" title="The Problem is …"></a>The Problem is …</h2><p>In my project, the visualization is implemented using <a class="link"   target="_blank" rel="noopener" href="https://github.com/neo4j-contrib/neovis.js/" >Neovis.js<i class="fas fa-external-link-alt"></i></a> package. It allows the graph visualization in the browser with data from Neo4j. In the config, it requires to connect with a Neo4j database, and in my case, it was connected with my local knowledge graph database, something like this:</p>
-<pre class="language-none"><code class="language-none">
-var config &#x3D; &#123;
-                    container_id: &quot;viz&quot;,
-                    server_url: &quot;bolt:&#x2F;&#x2F;localhost:6784&quot;,
-                    server_user: &quot;neo4j&quot;,
-                    server_password: &quot;password&quot;,
-                    ...
-                    &#125;</code></pre>
-
-<p>Therefore, when the user opens this page to view the visualization, the plug-in will perform queries on the local graph database based on the configuration above. The problem is that there is no graph database on the user’s computer. So, here I need to configure a database that can be accessed remotely.</p>
-<h2 id="Possible-way-to-solve-it"><a href="#Possible-way-to-solve-it" class="headerlink" title="Possible way to solve it"></a>Possible way to solve it</h2><p>As long as we have a remote database, or make my local database accessible remotely, this problem will be solved. There are two possible methods for it, as far as I concerned:</p>
-<ol>
-<li>Export my local knowledge base and upload it to a remote server</li>
-<li>Use tools like <a class="link"   target="_blank" rel="noopener" href="https://ngrok.com/" >Ngrok<i class="fas fa-external-link-alt"></i></a> to make localhost accessible by Internet</li>
-</ol>
-<p>Finally I chose the first method. Since the second way has an obvious shortcoming that my pc would not be a good server because it is not guaranteed to be accessible 7/24. </p>
-<p>And to find a remote server, it could be cloud server from Google or Amazon. But the complex registration and configuration would be too much work for a small project, unless you already have your own server, and the price… I don’t know. </p>
-<p>Fortunately, Neo4j has it own cloud service, which is called Neo4j <a class="link"   target="_blank" rel="noopener" href="https://neo4j.com/cloud/aura/" >Aura<i class="fas fa-external-link-alt"></i></a>, and Aura has free plan for personal use!</p>
-<h2 id="Hands-on"><a href="#Hands-on" class="headerlink" title="Hands on"></a>Hands on</h2><p>First, we need to export the knowledge graph data from local database. </p>
-<h4 id="Export-the-data"><a href="#Export-the-data" class="headerlink" title="Export the data"></a>Export the data</h4><p>I tried <code>apoc.export.all.csv</code> first, however, it didn’t work really well. The exported csv data can not be read properly on Aura. </p>
-<p>Another way is generating a dump file. This way is much easier and promising. Open the Terminal of your graph database on Neo4j Desktop. And the command to generate dump is:</p>
-<pre class="language-none"><code class="language-none">$ bin\neo4j-admin dump --database&#x3D;neo4j --to&#x3D;&#123;target path &#125;.dump</code></pre>
-
-<p>Result:</p>
-<pre class="language-none"><code class="language-none">Done: 89 files, 63.31MiB processed.</code></pre>
-
-<h4 id="Import-the-data-on-Aura"><a href="#Import-the-data-on-Aura" class="headerlink" title="Import the data on Aura"></a>Import the data on Aura</h4><p>Before importing, create a project on Aura, and click the title to see the import section:</p>
-<div align="center"><img src="https://raw.githubusercontent.com/DouLiu95/hexo-site-comments/main/20211119/aura.2wl20tu2im0.png" alt="Aura upload" style="width: 100%;max-height: 100%" /> </div>
-
-<p>Here, drop the Dump file to upload, wait for a while for the updating and then the knowledge graph is on the cloud server now.</p>
-<p>The URL for this database is offered. With the URL, name and password, now the knowledge graph can be accessed anywhere!</p>
-<h4 id="Issue-for-the-URL"><a href="#Issue-for-the-URL" class="headerlink" title="Issue for the URL"></a>Issue for the URL</h4><p>The default URL of the database on Aura starts with <code>neo4j+s://</code> , when I use this as the configuration in Neovis, it specifies to require SSL and a valid cert. As suggested in the document of Neovis</p>
+            <h1 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h1><p>Docker is a containerization platform that enables you to create, deploy, and run applications conveniently with the help of containers. These applications work within containers, like a lightweight VM. As a results, there will be no more installation, environment or application failure errors when you try to install it on another machine. </p>
 <blockquote>
-<h4 id="config-encrypted"><a href="#config-encrypted" class="headerlink" title="config.encrypted"></a><code>config.encrypted</code></h4><pre class="language-none"><code class="language-none">&quot;ENCRYPTION_OFF&quot;&#96; (default) or &#96;&quot;ENCRYPTION_ON&quot;</code></pre>
-
-<p>This must be set to <code>&quot;ENCRYPTION_ON&quot;</code> when using a secure WebSocket connection, such as with Neo4j Aura.</p>
+<p>A Docker container can use one machine, share its kernel and virtualize the OS to run more isolated processes. As a result, Docker containers are lightweight. A Docker image is like a snapshot in other types of VM environments. It is a record of a Docker container at a specific point in time.</p>
 </blockquote>
-<p> I added it in the config, and the page got error said:</p>
-<pre class="language-none"><code class="language-none">Encryption&#x2F;trust can only be configured either through URL or config</code></pre>
+<h3 id="Install-Docker-on-Ubuntu-server"><a href="#Install-Docker-on-Ubuntu-server" class="headerlink" title="Install Docker on Ubuntu server"></a>Install Docker on Ubuntu server</h3><p>Follow the instructions of <a class="link"   target="_blank" rel="noopener" href="https://docs.docker.com/engine/install/ubuntu/" >Install Docker Engine on Ubuntu<i class="fas fa-external-link-alt"></i></a></p>
+<h4 id="Set-up-the-repository"><a href="#Set-up-the-repository" class="headerlink" title="Set up the repository"></a>Set up the repository</h4><ol>
+<li><p>Update the <code>apt</code> package index and install packages to allow <code>apt</code> to use a repository over HTTPS:</p>
+<pre class="language-sh" data-language="sh"><code class="language-sh">sudo apt-get update
+sudo apt-get install \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release</code></pre></li>
+<li><p>Add Docker’s official GPG key:</p>
+<pre class="language-sh" data-language="sh"><code class="language-sh">sudo mkdir -p &#x2F;etc&#x2F;apt&#x2F;keyrings
+curl -fsSL https:&#x2F;&#x2F;download.docker.com&#x2F;linux&#x2F;ubuntu&#x2F;gpg | sudo gpg --dearmor -o &#x2F;etc&#x2F;apt&#x2F;keyrings&#x2F;docker.gpg</code></pre></li>
+<li><p>Use the following command to set up the repository:</p>
+</li>
+</ol>
+<pre class="language-sh" data-language="sh"><code class="language-sh">echo \
+  &quot;deb [arch&#x3D;$(dpkg --print-architecture) signed-by&#x3D;&#x2F;etc&#x2F;apt&#x2F;keyrings&#x2F;docker.gpg] https:&#x2F;&#x2F;download.docker.com&#x2F;linux&#x2F;ubuntu \
+  $(lsb_release -cs) stable&quot; | sudo tee &#x2F;etc&#x2F;apt&#x2F;sources.list.d&#x2F;docker.list &gt; &#x2F;dev&#x2F;null</code></pre>
+<h4 id="Install-Docker-Engine"><a href="#Install-Docker-Engine" class="headerlink" title="Install Docker Engine"></a>Install Docker Engine</h4><ol>
+<li>Update the <code>apt</code> package index, and install the latest version of Docker Engine, containerd, and Docker Compose, or go to the next step to install a specific version:<pre class="language-sh" data-language="sh"><code class="language-sh">sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin</code></pre></li>
+<li>To install a specific version of Docker Engine, list the available versions in the repo, then select and install: <pre class="language-sh" data-language="sh"><code class="language-sh"># 1. List the versions available in your repo:
+apt-cache madison docker-ce
 
-<p>To solve it, as suggested in <a class="link"   target="_blank" rel="noopener" href="https://github.com/grand-stack/grand-stack-starter/issues/129" >here<i class="fas fa-external-link-alt"></i></a>, set the URL to be <code>neo4j://</code> fixes it.  Like this:</p>
-<pre class="language-html" data-language="html"><code class="language-html">var config = &#123;
-                    container_id: "viz",
-                    server_url: "neo4j://fc932d9f.databases.neo4j.io",
-                    server_user: "neo4j",
-                    server_password: "password",
-                    encrypted:'ENCRYPTION_ON',
-                    trust:'TRUST_SYSTEM_CA_SIGNED_CERTIFICATES',
-					...
-				&#125;</code></pre>
+# 2. Install a specific version using the version string from the second column
+sudo apt-get install docker-ce&#x3D;&lt;VERSION_STRING&gt; docker-ce-cli&#x3D;&lt;VERSION_STRING&gt; containerd.io docker-compose-plugin
 
+# 3. Verify that Docker Engine is installed correctly
+sudo docker run hello-world</code></pre></li>
+</ol>
+<h1 id="Neo4j-with-Docker"><a href="#Neo4j-with-Docker" class="headerlink" title="Neo4j with Docker"></a>Neo4j with Docker</h1><h3 id="Get-files-of-database"><a href="#Get-files-of-database" class="headerlink" title="Get files of database"></a>Get files of database</h3><p>Go to the repository and download <code>neo4j.zip</code>. Upzip the <code>neo4j.zip</code> downloaded from the github, remember its location, which will be used later.</p>
+<h3 id="Pull-the-Neo4j-image"><a href="#Pull-the-Neo4j-image" class="headerlink" title="Pull the Neo4j image"></a>Pull the Neo4j image</h3><p>I work on the conversational agent projects using a Windows laptop. So I installed <code>Docker 4.8.1 (78998)</code> on my computer. To run neo4j in Docker, we do not need to create an empty docker container example and download Neo4j within the container ourselves. Thanks to the Docker Hub, which is kind of similart to Github, we can download the official docker images for almost all kinds of softwares easily, such as Neo4j. To download <a class="link"   target="_blank" rel="noopener" href="https://hub.docker.com/_/neo4j/" >Neo4j on Docker<i class="fas fa-external-link-alt"></i></a>, use </p>
+<pre class="language-sh" data-language="sh"><code class="language-sh">docker pull neo4j</code></pre>
+<p>, which will automatically pull the latest version of Neo4j on Docker.</p>
+<h3 id="Create-a-Neo4j-container"><a href="#Create-a-Neo4j-container" class="headerlink" title="Create a Neo4j container"></a>Create a Neo4j container</h3><p>Before we create a container, it should be noted that I used <code>Neo4j APOC</code> plugin to export the whole database. Thus, I also need to enable the APOC plugin when creating a new Neo4j container, so that we can import the dataset. Another important config setting is <code>NEO4J_dbms_allow__upgrade=true</code>, which allows the databse upgrade, otherwise, the unzipped database above can not be imported automatically.</p>
+<p>I use command below to create a Neo4j container:</p>
+<pre class="language-sh" data-language="sh"><code class="language-sh">docker run -p 7474:7474 -p 7687:7687 \
+        --volume&#x3D;$HOME&#x2F;neo4j&#x2F;data:&#x2F;data \
+        --volume&#x3D;$HOME&#x2F;neo4j&#x2F;logs:&#x2F;logs \
+        --volume&#x3D;$HOME&#x2F;neo4j&#x2F;import:&#x2F;var&#x2F;lib&#x2F;neo4j&#x2F;import \
+        --volume&#x3D;$HOME&#x2F;neo4j&#x2F;plugins:&#x2F;plugins \
+        --name neo4j-apoc \
+        --env NEO4J_AUTH&#x3D;neo4j&#x2F;000000 \
+        --env&#x3D;NEO4J_dbms_allow__upgrade&#x3D;true \
+        -e NEO4J_apoc_export_file_enabled&#x3D;true \
+        -e NEO4J_apoc_import_file_enabled&#x3D;true \
+        -e NEO4J_apoc_import_file_use__neo4j__config&#x3D;true \
+        -e NEO4JLABS_PLUGINS&#x3D;\[\&quot;apoc\&quot;\] \
+        neo4j:latest
+</code></pre>
+<p>where <code>$HOME/neo4j/import</code> should be the path the exported csv file located, which is <code>/home/d</code> in my case. The initialization takes a while, after that, the new imported Neo4j database is up running and can be accessed.</p>
+<blockquote>
+<p>APOC Name History</p>
+</blockquote>
+<blockquote>
+<p>Apoc was the technician and driver on board of the Nebuchadnezzar in the Matrix movie. He was killed by Cypher.</p>
+</blockquote>
+<blockquote>
+<p>APOC was also the first bundled A Package Of Component for Neo4j in 2009.</p>
+</blockquote>
+<blockquote>
+<p>APOC also stands for “Awesome Procedures On Cypher”</p>
+</blockquote>
+<h1 id="Skip-the-docker-run-every-single-time"><a href="#Skip-the-docker-run-every-single-time" class="headerlink" title="Skip the docker run every single time"></a>Skip the docker run every single time</h1><p>Sets the docker service to start when the server starts:</p>
+<pre class="language-none"><code class="language-none">sudo systemctl enable docker</code></pre>
 
-
-
-
-<h4 id="Connect-Aura-with-Python"><a href="#Connect-Aura-with-Python" class="headerlink" title="Connect Aura with Python"></a>Connect Aura with Python</h4><p>So as I transfer the dataset to Aura, I should also update my python code, which is connected to the graph base for query using Py2neo.</p>
-<p>The previous code to connect local database is:</p>
-<pre class="language-none"><code class="language-none">g &#x3D; Graph(
-            scheme&#x3D;&quot;neo4j&quot;,
-            host&#x3D;&quot;localhost&quot;,
-            port&#x3D;7687,
-            auth&#x3D;(&quot;neo4j&quot;, &quot;password&quot;))</code></pre>
-
-<p> For Aura, it changes to:</p>
-<pre class="language-none"><code class="language-none">g &#x3D; Graph(&quot;neo4j+s:&#x2F;&#x2F;fc932d9f.databases.neo4j.io&quot;, auth&#x3D;(&quot;neo4j&quot;, &quot;password&quot;), routing&#x3D;True)</code></pre>
+<p>Make the container auto run</p>
+<pre class="language-none"><code class="language-none">docker update --restart&#x3D;always &lt;container-name&gt;</code></pre>
 
 
         </div>
@@ -270,29 +273,14 @@ var config &#x3D; &#123;
         
             <div class="article-nav">
                 
-                    <div class="article-prev">
-                        <a class="prev"
-                           rel="prev"
-                           href="/2022/06/23/Neo4j%20from%20desktop%20of%20Windows%20to%20Docker%20in%20Linux/"
-                        >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex-center">
-                                <span class="post-nav-title-item"></span>
-                                <span class="post-nav-item">Prev posts</span>
-                            </span>
-                        </a>
-                    </div>
-                
                 
                     <div class="article-next">
                         <a class="next"
                            rel="next"
-                           href="/2021/10/21/Create-First-Post/"
+                           href="/2021/11/04/How-to-Transfer-the-local-knowledge-map-to-the-Neo4j-Aura/"
                         >
                             <span class="title flex-center">
-                                <span class="post-nav-title-item">Why blog?</span>
+                                <span class="post-nav-title-item">Let&#39;s migrate graph to Neo4j Aura</span>
                                 <span class="post-nav-item">Next posts</span>
                             </span>
                             <span class="right arrow-icon flex-center">
@@ -494,7 +482,7 @@ var config &#x3D; &#123;
         <aside class="page-aside">
             <div class="post-toc-wrap">
     <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#The-Problem-is-%E2%80%A6"><span class="nav-number">1.</span> <span class="nav-text">The Problem is …</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Possible-way-to-solve-it"><span class="nav-number">2.</span> <span class="nav-text">Possible way to solve it</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hands-on"><span class="nav-number">3.</span> <span class="nav-text">Hands on</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Export-the-data"><span class="nav-number">3.0.1.</span> <span class="nav-text">Export the data</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Import-the-data-on-Aura"><span class="nav-number">3.0.2.</span> <span class="nav-text">Import the data on Aura</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Issue-for-the-URL"><span class="nav-number">3.0.3.</span> <span class="nav-text">Issue for the URL</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#config-encrypted"><span class="nav-number">3.0.4.</span> <span class="nav-text">config.encrypted</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Connect-Aura-with-Python"><span class="nav-number">3.0.5.</span> <span class="nav-text">Connect Aura with Python</span></a></li></ol></li></ol></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker"><span class="nav-number">1.</span> <span class="nav-text">Docker</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Install-Docker-on-Ubuntu-server"><span class="nav-number">1.0.1.</span> <span class="nav-text">Install Docker on Ubuntu server</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Set-up-the-repository"><span class="nav-number">1.0.1.1.</span> <span class="nav-text">Set up the repository</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Install-Docker-Engine"><span class="nav-number">1.0.1.2.</span> <span class="nav-text">Install Docker Engine</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Neo4j-with-Docker"><span class="nav-number">2.</span> <span class="nav-text">Neo4j with Docker</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Get-files-of-database"><span class="nav-number">2.0.1.</span> <span class="nav-text">Get files of database</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pull-the-Neo4j-image"><span class="nav-number">2.0.2.</span> <span class="nav-text">Pull the Neo4j image</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Create-a-Neo4j-container"><span class="nav-number">2.0.3.</span> <span class="nav-text">Create a Neo4j container</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Skip-the-docker-run-every-single-time"><span class="nav-number">3.</span> <span class="nav-text">Skip the docker run every single time</span></a></li></ol>
     </div>
 </div>
         </aside>
