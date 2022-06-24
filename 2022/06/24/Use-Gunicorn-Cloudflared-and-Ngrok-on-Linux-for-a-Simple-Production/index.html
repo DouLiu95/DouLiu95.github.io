@@ -208,7 +208,7 @@
 <h3 id="Use-Gunicorn-as-server"><a href="#Use-Gunicorn-as-server" class="headerlink" title="Use Gunicorn as server"></a>Use Gunicorn as server</h3><blockquote>
 <p>Gunicorn ‘Green Unicorn’ is a Python WSGI HTTP for UNIX. It’s a pre-fork worker model. The Gunicorn server is broadly compatible with various web frameworks, simply implemented, light on server resources, and fairly speedy.</p>
 </blockquote>
-<p>This article<a class="link"   target="_blank" rel="noopener" href="https://medium.com/building-the-system/gunicorn-3-means-of-concurrency-efbb547674b7" >^article<i class="fas fa-external-link-alt"></i></a> explains how to use <code>gunicorn</code> to optimize the performance.<br>To install the <code>gunicorn</code>:</p>
+<p>This <a class="link"   target="_blank" rel="noopener" href="https://medium.com/building-the-system/gunicorn-3-means-of-concurrency-efbb547674b7" >article<i class="fas fa-external-link-alt"></i></a> explains how to use <code>gunicorn</code> to optimize the performance.<br>To install the <code>gunicorn</code>:</p>
 <pre class="language-none"><code class="language-none">pip install gunicorn </code></pre>
 
 <p>Using gunicorn to run the flask application:</p>
@@ -218,7 +218,7 @@
 <ol>
 <li><code>-w</code> equals to <code>--workers</code>, which represents the number of workers;</li>
 <li><code>-b</code> equals to <code>--bind</code>, which specifies the bind address (must be local host and for both IPV4 and IPV6);</li>
-<li><code>-k</code> equals to <code>--worker-class</code>, specifies the type of workers to use, such as <code>sync</code>, <code>eventlet</code>, <code>gevent</code>, <code>tornado</code> and <code>gthread</code>. And we could use <code>gevent</code> here, <code>gevent</code> is a coroutine-based Python networking library that uses greenlet to provide a high-level synchronous API on top of the libev or libuv event loop<a class="link"   target="_blank" rel="noopener" href="http://www.gevent.org/" >^1<i class="fas fa-external-link-alt"></i></a>.</li>
+<li><code>-k</code> equals to <code>--worker-class</code>, specifies the type of workers to use, such as <code>sync</code>, <code>eventlet</code>, <code>gevent</code>, <code>tornado</code> and <code>gthread</code>. And we could use <a class="link"   target="_blank" rel="noopener" href="http://www.gevent.org/" >gevent<i class="fas fa-external-link-alt"></i></a> here, <code>gevent</code> is a coroutine-based Python networking library that uses greenlet to provide a high-level synchronous API on top of the libev or libuv event loop.</li>
 </ol>
 <h4 id="Create-a-Linux-service"><a href="#Create-a-Linux-service" class="headerlink" title="Create a Linux service"></a>Create a Linux service</h4><p>Create service firstly:</p>
 <pre class="language-none"><code class="language-none">sudo nano &#x2F;etc&#x2F;systemd&#x2F;system&#x2F;&lt;service-name&gt;.service</code></pre>
@@ -240,7 +240,7 @@ WantedBy&#x3D;multi-user.target</code></pre>
 
 <p>Then enable the service:</p>
 <pre class="language-none"><code class="language-none">sudo systemctl enable &lt;service-name&gt;.service --now</code></pre>
-<h1 id="Expose-the-service-to-the-Internet"><a href="#Expose-the-service-to-the-Internet" class="headerlink" title="Expose the service to the Internet"></a>Expose the service to the Internet</h1><h2 id="Option-1-Cloudflare-Free"><a href="#Option-1-Cloudflare-Free" class="headerlink" title="Option 1: Cloudflare (Free)"></a>Option 1: Cloudflare (Free)</h2><p>Cloudflare can create a Tunnel and securely make a local service accessible to the Internet. This part I followed a tutorial<a class="link"   target="_blank" rel="noopener" href="https://omar2cloud.github.io/cloudflare/" >^3<i class="fas fa-external-link-alt"></i></a> to create such a tunnel via Cloudflare on Ubuntu 20.04 LTS server.</p>
+<h1 id="Expose-the-service-to-the-Internet"><a href="#Expose-the-service-to-the-Internet" class="headerlink" title="Expose the service to the Internet"></a>Expose the service to the Internet</h1><h2 id="Option-1-Cloudflare-Free"><a href="#Option-1-Cloudflare-Free" class="headerlink" title="Option 1: Cloudflare (Free)"></a>Option 1: Cloudflare (Free)</h2><p>Cloudflare can create a Tunnel and securely make a local service accessible to the Internet. This part I followed a <a class="link"   target="_blank" rel="noopener" href="https://omar2cloud.github.io/cloudflare/" >tutorial<i class="fas fa-external-link-alt"></i></a> to create such a tunnel via Cloudflare on Ubuntu 20.04 LTS server.</p>
 <blockquote>
 <p><strong>Cloudflare</strong> is a global network designed to make everything you connect to the Internet secure, private, fast, and reliable. Cloudflare offers a suite of services and <strong>Zero Trust Services</strong> are the services we will utilize in the following tutorials. Zero Trust Services consist of Teams, Access, Gateway and Browser Isolation.</p>
 </blockquote>
@@ -288,7 +288,7 @@ WantedBy&#x3D;multi-user.target</code></pre>
 <p>Then, enable this service:</p>
 <pre class="language-none"><code class="language-none">systemctl enable cloudflared --now</code></pre>
 <p>As a result, the Linux server will automatically run this service.</p>
-<h2 id="Ngrok-Subscribe-needed-when-long-term-use"><a href="#Ngrok-Subscribe-needed-when-long-term-use" class="headerlink" title="Ngrok (Subscribe needed when long-term use)"></a>Ngrok (Subscribe needed when long-term use)</h2><p><code>ngrok</code><a class="link"   target="_blank" rel="noopener" href="https://ngrok.com/docs/getting-started" >^2<i class="fas fa-external-link-alt"></i></a> is a cross-platform application that exposes local server ports to the Internet.</p>
+<h2 id="Ngrok-Subscribe-needed-when-long-term-use"><a href="#Ngrok-Subscribe-needed-when-long-term-use" class="headerlink" title="Ngrok (Subscribe needed when long-term use)"></a>Ngrok (Subscribe needed when long-term use)</h2><p><a class="link"   target="_blank" rel="noopener" href="https://ngrok.com/docs/getting-started" >Ngrok<i class="fas fa-external-link-alt"></i></a> is a cross-platform application that exposes local server ports to the Internet.</p>
 <table>
 <thead>
 <tr>
