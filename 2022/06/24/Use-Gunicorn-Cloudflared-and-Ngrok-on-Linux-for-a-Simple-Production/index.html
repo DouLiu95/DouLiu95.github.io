@@ -228,12 +228,12 @@ Description&#x3D;Gunicorn instance to serve virtual museum agent
 After&#x3D;network.target
 
 [Service]
-User&#x3D;d    
+User&#x3D;&lt;user-name&gt; 
 Group&#x3D;www-data
-ExecStartPre&#x3D;&#x2F;bin&#x2F;sleep 60  # this service should run after the docker container is active and up running, so wait 60s first
-WorkingDirectory&#x3D;&#x2F;home&#x2F;d&#x2F;HHAI2022_Virtual_Museum_Guide                             
-Environment&#x3D;&quot;PATH&#x3D;&#x2F;home&#x2F;d&#x2F;HHAI2022_Virtual_Museum_Guide&#x2F;&lt;venv-name&gt;&#x2F;bin&quot;
-ExecStart&#x3D;&#x2F;home&#x2F;d&#x2F;HHAI2022_Virtual_Museum_Guide&#x2F;&lt;venv-name&gt;&#x2F;bin&#x2F;gunicorn -w 1 -b 0.0.0.0:5000 app:app
+ExecStartPre&#x3D;&#x2F;bin&#x2F;sleep 60
+WorkingDirectory&#x3D;&#x2F;home&#x2F;&lt;user-name&gt;&#x2F;HHAI2022_Virtual_Museum_Guide                             
+Environment&#x3D;&quot;PATH&#x3D;&#x2F;home&#x2F;&lt;user-name&gt;&#x2F;HHAI2022_Virtual_Museum_Guide&#x2F;&lt;venv-name&gt;&#x2F;bin&quot;
+ExecStart&#x3D;&#x2F;home&#x2F;&lt;user-name&gt;&#x2F;HHAI2022_Virtual_Museum_Guide&#x2F;&lt;venv-name&gt;&#x2F;bin&#x2F;gunicorn -w 1 -b 0.0.0.0:5000 app:app
 
 [Install]
 WantedBy&#x3D;multi-user.target</code></pre>
@@ -261,7 +261,7 @@ sudo rm cloudflared-linux-amd64.deb</code></pre>
 <h4 id="Step-5-Create-config-file-for-the-new-tunnel"><a href="#Step-5-Create-config-file-for-the-new-tunnel" class="headerlink" title="Step 5: Create config file for the new tunnel"></a>Step 5: Create config file for the new tunnel</h4><pre class="language-none"><code class="language-none">nano ~&#x2F;.cloudflared&#x2F;config.yml</code></pre>
 <p>Change the config as:</p>
 <pre class="language-none"><code class="language-none">tunnel: &lt;Tunnel-NAME&gt;
-credentials-file: &#x2F;root&#x2F;.cloudflared&#x2F;&lt;Tunnel-UUID&gt;.json
+credentials-file: &#x2F;home&#x2F;&lt;user-name&gt;&#x2F;.cloudflared&#x2F;&lt;Tunnel-UUID&gt;.json
 ingress:
   - hostname: &lt;domain-name&gt;
     service: http:&#x2F;&#x2F;localhost:5000
@@ -279,7 +279,7 @@ After&#x3D;network.target
 [Service]
 TimeoutStartSec&#x3D;0
 Type&#x3D;notify
-ExecStart&#x3D;&#x2F;usr&#x2F;bin&#x2F;cloudflared --loglevel debug --transport-loglevel warn --config &#x2F;root&#x2F;.cloudflared&#x2F;config.yml tunnel run &lt;Tunnel-NAME&gt;
+ExecStart&#x3D;&#x2F;usr&#x2F;bin&#x2F;cloudflared --loglevel debug --transport-loglevel warn --config &#x2F;home&#x2F;&lt;user-name&gt;&#x2F;.cloudflared&#x2F;config.yml tunnel run &lt;Tunnel-NAME&gt;
 Restart&#x3D;on-failure
 RestartSec&#x3D;5s
 
